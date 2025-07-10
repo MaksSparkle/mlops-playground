@@ -1,0 +1,30 @@
+name: Docker CI
+on:
+push:
+branches:[main]
+pull_request:
+branches:[main]
+jobs:
+build:
+runs-in: ubuntu-latest
+steps:
+-name: Checkout code
+uses: actions/checkout@v4
+-name: Set up Docker BuildX
+uses: docker/setup-buildx-action@v2
+  - name: (Опционально) Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false       # true — если хочешь пушить в DockerHub
+          tags: iris-fastapi:latest
+
+      - name: Verify build
+        run: docker images
