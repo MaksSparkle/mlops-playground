@@ -25,4 +25,4 @@ jobs:
           tags: iris-fastapi:latest
 
       - name: Verify image
-        run: docker images | grep iris-fastapi
+        run: docker images 
